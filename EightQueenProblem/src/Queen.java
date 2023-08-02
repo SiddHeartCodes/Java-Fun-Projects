@@ -43,7 +43,8 @@ public class Queen {
         }
         return true;
     }
-
+//All the diagonal moving functions below, have the initials of the directions they check, for example, NE is North-East.
+    
     public boolean canMoveDiagonallyNE(Queen[][] board)
     {
         int i,j;
