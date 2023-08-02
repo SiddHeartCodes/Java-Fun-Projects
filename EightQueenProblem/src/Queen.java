@@ -1,5 +1,6 @@
 public class Queen {
     private int row;
+    private int column;
 
     public int getRow() {
         return row;
@@ -8,8 +9,6 @@ public class Queen {
     public int getColumn() {
         return column;
     }
-
-    private int column;
 
     public Queen(int row, int column)
     {
