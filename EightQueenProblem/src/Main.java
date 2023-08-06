@@ -2,47 +2,58 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class Main
 {
-    static Queen[][] board=new Queen[8][8];
-    static List<Queen> number=new ArrayList<>();
+    static int n=0;
+    static Queen[][] board=new Queen[8][8];//The player board
+    static List<Queen> number=new ArrayList<>(); //To store the number of queens placed
     static Scanner scanner=new Scanner(System.in);
 
     public static void main(String[] args)
     {
-        while(true)
-        {
-            System.out.println("Do you want to add a queen, 1 for yes or 2 for no (exit)?");
-            int choice = scanner.nextInt();
-            if (choice == 1)
-            {
-                System.out.println("Enter the row first, then column!");
-                int row = scanner.nextInt();
-                int column = scanner.nextInt();
-                Queen queen = new Queen(row - 1, column - 1);
-                board[row-1][column-1]=queen;
-                boolean check=true;
-                for(int i=0;i<number.size();i++)
-                {   check=number.get(i).canMove(board);
-                    if(!check)
+       checkPlace(number,board);
+        System.out.println(n/(8 * 7 * 6 * 5 * 4 * 3 * 2)); //We are dividing by 8! as there would be 8! ways to place
+        // same arrangement again
+    }
+
+    public static void checkPlace(List<Queen> number, Queen[][] board) {
+        if (number.size() != 8) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    int flag = 1;
+                    if(number.size()!=0)
                     {
-                        break;
+                        for (Queen queen : number) {
+                            if (i == queen.getRow() || j == queen.getColumn()) {
+                                flag = 0;
+                                break;
+                            }
+                        }
+                    }
+                    if (flag == 0)
+                        continue;
+                    board[i][j] = new Queen(i, j);
+
+                    for (Queen queen : number) {
+                        if (!queen.canMove(board)) {
+                            flag = 0;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        board[i][j] = null;
+                    } else {
+                        number.add(board[i][j]);
+                        checkPlace(number, board);// Recursively continue searching for other solutions
+                        number.remove(board[i][j]);
+                        board[i][j] = null;
                     }
                 }
-                if(check)
-                {
-                    number.add(queen);
-                    board[row - 1][column - 1] = queen;
-                    System.out.println("The new queen no." + number.size() + " is placed at row " +
-                            (number.get(number.size() - 1).getRow() + 1) + " and column " + (number.get(number.size() - 1).getColumn() + 1));
-                }
-                else
-                {
-                    board[row-1][column-1]=null;
-                    System.out.println("Sorry, queen can't be placed!");
-                }
             }
-            else break;
+        } else {
+            n++;
         }
     }
+
 }
